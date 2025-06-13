@@ -1,0 +1,80 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Kayıt Ol</h2>
+          
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="email" class="form-label">E-posta</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                formControlName="email"
+                [ngClass]="{'is-invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}"
+              >
+              <div class="invalid-feedback" *ngIf="registerForm.get('email')?.errors?.['required']">
+                E-posta adresi gereklidir.
+              </div>
+              <div class="invalid-feedback" *ngIf="registerForm.get('email')?.errors?.['email']">
+                Geçerli bir e-posta adresi giriniz.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Şifre</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                formControlName="password"
+                [ngClass]="{'is-invalid': registerForm.get('password')?.invalid && registerForm.get('password')?.touched}"
+              >
+              <div class="invalid-feedback" *ngIf="registerForm.get('password')?.errors?.['required']">
+                Şifre gereklidir.
+              </div>
+              <div class="invalid-feedback" *ngIf="registerForm.get('password')?.errors?.['minlength']">
+                Şifre en az 6 karakter olmalıdır.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">Şifre Tekrar</label>
+              <input
+                type="password"
+                class="form-control"
+                id="confirmPassword"
+                formControlName="confirmPassword"
+                [ngClass]="{'is-invalid': registerForm.errors?.['passwordMismatch'] && registerForm.get('confirmPassword')?.touched}"
+              >
+              <div class="invalid-feedback" *ngIf="registerForm.errors?.['passwordMismatch']">
+                Şifreler eşleşmiyor.
+              </div>
+            </div>
+
+            <div class="alert alert-danger" *ngIf="errorMessage">
+              {{ errorMessage }}
+            </div>
+
+            <div class="d-grid gap-2">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="registerForm.invalid || loading"
+              >
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                Kayıt Ol
+              </button>
+            </div>
+          </form>
+
+          <div class="text-center mt-3">
+            <p>Zaten hesabınız var mı? <a routerLink="/login">Giriş Yap</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

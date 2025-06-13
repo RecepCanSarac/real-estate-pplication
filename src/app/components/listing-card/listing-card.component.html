@@ -1,0 +1,31 @@
+<div class="card h-100">
+  <div class="position-relative">
+    <img [src]="listing.images[0]" class="card-img-top" [alt]="listing.title" style="height: 200px; object-fit: cover;">
+    <span class="position-absolute top-0 end-0 m-2 badge" [ngClass]="listing.type === 'sale' ? 'bg-success' : 'bg-primary'">
+      {{ listing.type === 'sale' ? 'Satılık' : 'Kiralık' }}
+    </span>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{ listing.title }}</h5>
+    <p class="card-text text-muted">{{ listing.location }}</p>
+    <p class="card-text">{{ listing.description | slice:0:100 }}{{ listing.description.length > 100 ? '...' : '' }}</p>
+    <div class="d-flex justify-content-between align-items-center">
+      <h4 class="mb-0">{{ listing.price | currency:'TRY':'symbol-narrow':'1.0-0' }}</h4>
+      <small class="text-muted">{{ listing.features.area }}m²</small>
+    </div>
+  </div>
+  <div class="card-footer bg-transparent">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="text-muted">
+        <small>
+          <i class="bi bi-person"></i> {{ listing.userEmail }}
+        </small>
+      </div>
+      <div class="text-muted">
+        <small>
+          <i class="bi bi-clock"></i> {{ listing.createdAt | date:'dd/MM/yyyy' }}
+        </small>
+      </div>
+    </div>
+  </div>
+</div> 

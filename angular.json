@@ -73,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "emlak-uygulamasi:build:production"
+              "buildTarget": "emlak-uygulamasi:build:production"
             },
             "development": {
-              "browserTarget": "emlak-uygulamasi:build:development"
+              "buildTarget": "emlak-uygulamasi:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -84,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "emlak-uygulamasi:build"
+            "buildTarget": "emlak-uygulamasi:build"
           }
         },
         "test": {
