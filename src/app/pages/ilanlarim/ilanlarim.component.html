@@ -1,0 +1,23 @@
+<div class="container mt-4">
+  <h2 class="text-primary">İlanlarım</h2>
+
+  <div class="row" *ngIf="ilanlar.length > 0; else bos">
+    <div class="col-md-4" *ngFor="let ilan of ilanlar">
+      <div class="card mb-4">
+        <img [src]="ilan.fotoUrl" class="card-img-top" alt="İlan Fotoğrafı">
+        <div class="card-body">
+          <h5 class="card-title">{{ ilan.baslik }}</h5>
+          <p>{{ ilan.aciklama }}</p>
+          <p><strong>{{ ilan.fiyat | currency:'TRY' }}</strong></p>
+          <button class="btn btn-danger btn-sm" (click)="ilanSil(ilan.id!)">Sil</button>
+          <a class="btn btn-warning btn-sm me-2" [routerLink]="['/ilan-duzenle', ilan.id]">Güncelle</a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #bos>
+    <p>Hiç ilanınız bulunmuyor.</p>
+  </ng-template>
+</div>

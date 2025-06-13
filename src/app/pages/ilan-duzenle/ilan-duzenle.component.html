@@ -1,0 +1,92 @@
+<div class="container py-5" *ngIf="ilan">
+  <h2 class="text-center text-warning mb-4">İlan Güncelle</h2>
+
+  <form #guncelleForm="ngForm" (ngSubmit)="ilanGuncelle()" class="row g-4">
+
+    <div class="col-md-6">
+      <label class="form-label">Başlık</label>
+      <input type="text" name="baslik" [(ngModel)]="ilan.baslik" required minlength="3"
+             #baslik="ngModel" class="form-control"
+             [class.is-invalid]="baslik.invalid && baslik.touched"
+             [class.is-valid]="baslik.valid && baslik.touched">
+      <div class="invalid-feedback">Başlık en az 3 karakter olmalıdır.</div>
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Fiyat</label>
+      <input type="number" name="fiyat" [(ngModel)]="ilan.fiyat" required min="100"
+             #fiyat="ngModel" class="form-control"
+             [class.is-invalid]="fiyat.invalid && fiyat.touched"
+             [class.is-valid]="fiyat.valid && fiyat.touched">
+      <div class="invalid-feedback">Fiyat en az 100 olmalıdır.</div>
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Konum</label>
+      <input type="text" name="konum" [(ngModel)]="ilan.konum" required minlength="2"
+             #konum="ngModel" class="form-control"
+             [class.is-invalid]="konum.invalid && konum.touched"
+             [class.is-valid]="konum.valid && konum.touched">
+      <div class="invalid-feedback">Konum bilgisi girilmelidir.</div>
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Tür</label>
+      <select name="tur" [(ngModel)]="ilan.tur" required #tur="ngModel"
+              class="form-select"
+              [class.is-invalid]="tur.invalid && tur.touched"
+              [class.is-valid]="tur.valid && tur.touched">
+        <option value="">Seçiniz</option>
+        <option value="kiralik">Kiralık</option>
+        <option value="satilik">Satılık</option>
+      </select>
+      <div class="invalid-feedback">Tür seçilmelidir.</div>
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Oda Sayısı</label>
+      <select name="odaSayisi" [(ngModel)]="ilan.odaSayisi" required #odaSayisi="ngModel"
+              class="form-select"
+              [class.is-invalid]="odaSayisi.invalid && odaSayisi.touched"
+              [class.is-valid]="odaSayisi.valid && odaSayisi.touched">
+        <option *ngFor="let s of [1,2,3,4,5,6]" [value]="s">{{ s }}</option>
+      </select>
+      <div class="invalid-feedback">Oda sayısı seçilmelidir.</div>
+    </div>
+
+    <div class="col-12">
+      <label class="form-label">Açıklama</label>
+      <textarea class="form-control" name="aciklama" [(ngModel)]="ilan.aciklama" required minlength="10"
+                #aciklama="ngModel"
+                [class.is-invalid]="aciklama.invalid && aciklama.touched"
+                [class.is-valid]="aciklama.valid && aciklama.touched"></textarea>
+      <div class="invalid-feedback">Açıklama en az 10 karakter olmalıdır.</div>
+    </div>
+
+    <div class="col-12">
+      <label class="form-label">Kapak Fotoğrafı URL</label>
+      <input type="url" class="form-control" [(ngModel)]="ilan.fotoUrl" name="fotoUrl" required #fotoUrl="ngModel"
+             [class.is-invalid]="fotoUrl.invalid && fotoUrl.touched"
+             [class.is-valid]="fotoUrl.valid && fotoUrl.touched">
+      <div class="invalid-feedback">Geçerli bir URL girin.</div>
+    </div>
+
+    <div class="col-12">
+      <label class="form-label">Diğer Görseller</label>
+      <div class="d-flex gap-2">
+        <input [(ngModel)]="yeniResimUrl" name="resim" class="form-control" placeholder="http://...">
+        <button type="button" class="btn btn-outline-warning" (click)="resimEkle()">Ekle</button>
+      </div>
+      <div class="row mt-2">
+        <div class="col-3 mb-2" *ngFor="let r of ilan.resimler; let i = index">
+          <img [src]="r" class="img-fluid rounded shadow-sm">
+          <button class="btn btn-sm btn-danger mt-1 w-100" type="button" (click)="resimSil(i)">Sil</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 text-end">
+      <button class="btn btn-warning px-4" type="submit" [disabled]="guncelleForm.invalid">Güncelle</button>
+    </div>
+  </form>
+</div>

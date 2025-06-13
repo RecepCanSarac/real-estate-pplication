@@ -1,0 +1,53 @@
+<div class="container my-4">
+  <h2 class="mb-4 text-primary fw-bold text-center">🏠 Tüm Emlak İlanları</h2>
+
+  <!-- FİLTRELER -->
+  <div class="row gy-2 gx-3 mb-4">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <input type="text" class="form-control" placeholder="Konum (örnek: İstanbul)" [(ngModel)]="konumFilter" (input)="filtrele()">
+    </div>
+    <div class="col-6 col-sm-6 col-md-2 col-lg-2">
+      <select class="form-select" [(ngModel)]="turFilter" (change)="filtrele()">
+        <option value="">Tüm Türler</option>
+        <option value="kiralik">Kiralık</option>
+        <option value="satilik">Satılık</option>
+      </select>
+    </div>
+    <div class="col-6 col-sm-6 col-md-2 col-lg-2">
+      <select class="form-select" [(ngModel)]="odaFilter" (change)="filtrele()">
+        <option value="">Oda Sayısı</option>
+        <option *ngFor="let oda of odaSecenekleri" [value]="oda">{{ oda }}</option>
+      </select>
+    </div>
+    <div class="col-6 col-sm-6 col-md-2 col-lg-2">
+      <input type="number" class="form-control" placeholder="Min ₺" [(ngModel)]="fiyatMin" (input)="filtrele()">
+    </div>
+    <div class="col-6 col-sm-6 col-md-2 col-lg-2">
+      <input type="number" class="form-control" placeholder="Max ₺" [(ngModel)]="fiyatMax" (input)="filtrele()">
+    </div>
+    <div class="col-12 col-md-12 col-lg-1 d-grid">
+      <button class="btn btn-outline-secondary" (click)="resetFiltre()">Sıfırla</button>
+    </div>
+  </div>
+
+  <!-- İLANLAR -->
+  <div class="row">
+    <div class="col-12 col-sm-12 col-md-6 col-lg-4 mb-4" *ngFor="let ilan of ilanlar">
+      <div class="card h-100 shadow-sm border-0 hover-zoom">
+        <img [src]="ilan.fotoUrl || 'https://via.placeholder.com/400'" class="card-img-top rounded-top img-fluid" alt="İlan Fotoğrafı" style="object-fit: cover; height: 220px;">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title fw-bold text-dark">{{ ilan.baslik }}</h5>
+          <p class="text-muted mb-1">
+            <i class="bi bi-geo-alt-fill text-danger"></i> {{ ilan.konum }} - {{ ilan.tur | uppercase }}
+          </p>
+          <p class="mb-1"><i class="bi bi-door-open"></i> Oda: {{ ilan.odaSayisi || '-' }}</p>
+          <p class="flex-grow-1">{{ ilan.aciklama | slice:0:80 }}...</p>
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center bg-white border-top-0">
+          <span class="fw-bold text-success">{{ ilan.fiyat | currency:'TRY' }}</span>
+          <a [routerLink]="['/ilan', ilan.id]" class="btn btn-sm btn-outline-primary">Detay</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

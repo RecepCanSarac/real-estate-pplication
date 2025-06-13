@@ -1,0 +1,59 @@
+<div class="container my-5" *ngIf="ilan">
+  <h2 class="mb-4 fw-bold text-primary text-center">{{ ilan.baslik }}</h2>
+
+  <!-- Ana Foto ve Bilgiler -->
+  <div class="row g-4">
+    <div class="col-12 col-lg-7">
+      <img [src]="ilan.fotoUrl || 'https://via.placeholder.com/800x500'" class="img-fluid rounded shadow w-100" alt="Kapak Foto">
+    </div>
+
+    <div class="col-12 col-lg-5">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <p><strong>📍 Konum:</strong> {{ ilan.konum }}</p>
+          <p><strong>🏠 Tür:</strong> {{ ilan.tur | titlecase }}</p>
+          <p><strong>🚪 Oda:</strong> {{ ilan.odaSayisi }}</p>
+          <p><strong>📝 Açıklama:</strong> {{ ilan.aciklama }}</p>
+          <p><strong>💰 Fiyat:</strong> <span class="text-success fw-bold fs-5">{{ ilan.fiyat | currency:'TRY' }}</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Diğer Görseller -->
+  <div *ngIf="ilan.resimler?.length" class="mt-5">
+    <h4 class="text-secondary mb-3">📷 Diğer Görseller</h4>
+    <div class="row g-3">
+      <div class="col-6 col-md-3" *ngFor="let resim of ilan.resimler; let i = index">
+        <img [src]="resim" class="img-fluid rounded shadow-sm cursor-pointer w-100" alt="İlan Resim">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Slider -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">Görsel Galerisi</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+      </div>
+      <div class="modal-body">
+        <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div *ngFor="let resim of ilan?.resimler; let i = index" class="carousel-item" [class.active]="i === aktifIndex">
+              <img [src]="resim" class="d-block w-100 rounded" alt="Görsel">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
