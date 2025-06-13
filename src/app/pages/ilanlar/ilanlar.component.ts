@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IlanService } from 'src/app/services/ilan.service';
 import { Ilan } from 'src/app/models/ilan.model';
+import { FavoriService } from 'src/app/services/favori.service';
 
 @Component({
   selector: 'app-ilanlar',
@@ -10,7 +11,6 @@ export class IlanlarComponent implements OnInit {
   ilanlar: Ilan[] = [];
   tumIlanlar: Ilan[] = [];
 
-  // Filtre değişkenleri
   konumFilter: string = '';
   turFilter: string = '';
   fiyatMin: number | null = null;
@@ -18,12 +18,18 @@ export class IlanlarComponent implements OnInit {
   odaFilter: string = '';
   odaSecenekleri = ['1+0', '1+1', '2+1', '3+1', '4+1', '4+2', '5+1'];
 
-  constructor(private ilanService: IlanService) {}
+  favoriMi: { [ilanId: string]: boolean } = {};
+
+  constructor(
+    private ilanService: IlanService,
+    private favoriService: FavoriService
+  ) {}
 
   ngOnInit(): void {
     this.ilanService.getIlanlar().subscribe(data => {
       this.tumIlanlar = data;
       this.ilanlar = data;
+      this.yukleFavoriler();
     });
   }
 
@@ -64,5 +70,25 @@ export class IlanlarComponent implements OnInit {
     this.fiyatMax = null;
     this.odaFilter = '';
     this.ilanlar = [...this.tumIlanlar];
+  }
+
+  // 🔽 Favori işlemleri
+  yukleFavoriler() {
+    this.favoriService.getFavoriIlanIdleri().subscribe(ids => {
+      this.favoriMi = {};
+      ids.forEach(id => this.favoriMi[id] = true);
+    });
+  }
+
+  toggleFavori(ilanId: string) {
+    if (this.favoriMi[ilanId]) {
+      this.favoriService.favoriKaldir(ilanId).subscribe(() => {
+        this.favoriMi[ilanId] = false;
+      });
+    } else {
+      this.favoriService.favoriEkle(ilanId).subscribe(() => {
+        this.favoriMi[ilanId] = true;
+      });
+    }
   }
 }

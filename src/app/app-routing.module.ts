@@ -7,10 +7,12 @@ import { IlanlarimComponent } from './pages/ilanlarim/ilanlarim.component';
 import { IlanDuzenleComponent } from './pages/ilan-duzenle/ilan-duzenle.component';
 import { AuthGuard } from './guards/auth.guard';
 import { IlanDetayComponent } from './pages/ilan-detay/ilan-detay.component';
+import { RegisterComponent } from './pages/register/register.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'ilanlar', component: IlanlarComponent },
   { path: 'yeni-ilan', component: YeniIlanComponent },
   { path: 'ilanlarim', component: IlanlarimComponent },

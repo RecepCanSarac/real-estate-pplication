@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Ilan } from '../models/ilan.model';
 import { map, Observable } from 'rxjs';
+import { Auth } from '@angular/fire/auth';
+import { User } from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,7 @@ import { map, Observable } from 'rxjs';
 export class IlanService {
   private url = 'https://emlak-projesi-e7aca-default-rtdb.firebaseio.com/ilanlar.json';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private auth: Auth) {}
 
   getIlanlar(): Observable<Ilan[]> {
     return this.http.get<{ [key: string]: Ilan }>(this.url).pipe(
@@ -28,8 +30,21 @@ export class IlanService {
     );
   }
 
-  postIlan(ilan: Ilan) {
-    return this.http.post(this.url, ilan);
+  postIlan(ilan: Ilan): Observable<any> {
+    const user: User | null = this.auth.currentUser;
+
+    if (user) {
+      const ilanWithUser = {
+        ...ilan,
+        userId: user.uid,
+        userEmail: user.email,
+        createdAt: new Date().toISOString()
+      };
+
+      return this.http.post(this.url, ilanWithUser);
+    } else {
+      throw new Error('Kullanıcı oturumu yok. İlan eklemek için giriş yapılmalıdır.');
+    }
   }
 
   getIlanlarByUserId(uid: string): Observable<Ilan[]> {
@@ -38,7 +53,7 @@ export class IlanService {
     );
   }
 
-  deleteIlan(id: string) {
+  deleteIlan(id: string): Observable<any> {
     const url = `https://emlak-projesi-e7aca-default-rtdb.firebaseio.com/ilanlar/${id}.json`;
     return this.http.delete(url);
   }
@@ -48,10 +63,22 @@ export class IlanService {
     return this.http.get<Ilan>(url);
   }
 
-  updateIlan(id: string, ilan: Ilan) {
+  updateIlan(id: string, ilan: Ilan): Observable<any> {
     const url = `https://emlak-projesi-e7aca-default-rtdb.firebaseio.com/ilanlar/${id}.json`;
-    return this.http.put(url, ilan);
+    const user: User | null = this.auth.currentUser;
+  
+    if (user) {
+      const ilanWithUser = {
+        ...ilan,
+        userId: user.uid,
+        userEmail: user.email,
+        updatedAt: new Date().toISOString() 
+      };
+  
+      return this.http.put(url, ilanWithUser);
+    } else {
+      throw new Error('Güncelleme için giriş yapılmış olmalı.');
+    }
   }
-
   
 }

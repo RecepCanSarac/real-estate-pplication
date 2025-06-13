@@ -15,8 +15,13 @@ export class ListingService {
   ) {}
 
   async createListing(listing: Omit<Listing, 'id' | 'createdAt' | 'userId' | 'userEmail'>, images: File[]) {
-    const user = await this.authService.user$.toPromise();
+    let user = await this.authService.user$.toPromise();
+    if (!user) {
+      user = await this.authService.getCurrentUser();
+    }
     if (!user) throw new Error('Kullanıcı girişi gerekli');
+    console.log('Kullanıcı:', user);
+    console.log('Kullanıcı email:', user.email);
 
     const imageUrls = await Promise.all(
       images.map(image => this.uploadImage(image))
@@ -27,7 +32,7 @@ export class ListingService {
       images: imageUrls,
       createdAt: new Date(),
       userId: user.uid,
-      userEmail: user.email
+      userEmail: user.email || 'bilgi yok'
     };
 
     const docRef = await addDoc(collection(this.firestore, 'listings'), listingData);
